@@ -17,7 +17,7 @@ co_occurance_graph = r.get_courMatrix()
 freq = r.get_freq()
 scores = r.get_scores()
 """
-import re, string, pandas as pd
+import re, string, pandas as pd, os
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize, word_tokenize, wordpunct_tokenize
 from collections import Counter, defaultdict
@@ -60,7 +60,7 @@ class Rake(object):
         return
     def check_packages(self):
         try:
-            import re, string, pandas as pd
+            import re, string, pandas as pd, os
             from nltk.corpus import stopwords
             from nltk.tokenize import sent_tokenize, word_tokenize, wordpunct_tokenize
             from collections import Counter, defaultdict
@@ -218,7 +218,8 @@ class Rake(object):
 
 if __name__=="__main__":
     import rake
-    r = rake.Rake(r'C:\Users\Lenovo\Documents\Python Scripts\rawText4.txt')
+    text_file = r'rawText3.txt'
+    r = rake.Rake(os.path.join(os.curdir,text_file))
     text = r.text
     sents = r.preprocess()
     stopTerms = r.get_stopTerms()
@@ -230,6 +231,7 @@ if __name__=="__main__":
     degree = r.get_degree()
     vecs = r.get_unit_vecs()
     ranks = r.get_ranks()
+    print(ranks.head(10))
 
 
 
