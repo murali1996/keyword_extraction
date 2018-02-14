@@ -93,19 +93,18 @@ def similarFoodsHistory(givenFoods, foodDict, inputString, allWords, top_k, meth
             if sim_word_count>=1:
                 relevant_foodDict[key] = sim_word_count;
         #Finding Similarity index for relevant_foodDict #Currently, no use with 'sim_word_count'
-        simFoods = [];
-        relevant_simScore = {};
+        simFoods = []; relevant_foods_num = 6; others_foods_num = [];
+        relevant_simScore = {}; 
         for key in (relevant_foodDict.keys()):
             relevant_simScore[key] = cosine_similarity(foodDict[key], thisVec)[0][0]
-        if len(relevant_simScore.keys())>=top_k:
-            simFoods = sorted(relevant_simScore, key=relevant_simScore.get, reverse=True)[:top_k]
-        else:
-            simFoods = sorted(relevant_simScore, key=relevant_simScore.get, reverse=True)[:]
-            others_simScore = {};
-            for key in foodDict.keys():
-                if key not in relevant_foodDict.keys():
-                    others_simScore[key] = cosine_similarity(foodDict[key], thisVec)[0][0]
-            simFoods+=sorted(others_simScore, key=others_simScore.get, reverse=True)[:top_k-len(relevant_simScore.keys())]                    
+        relevant_foods_num = np.min( [relevant_foods_num, len(relevant_simScore.keys())] );
+        others_foods_num = top_k - relevant_foods_num;
+        simFoods = sorted(relevant_simScore, key=relevant_simScore.get, reverse=True)[:relevant_foods_num]       
+        others_simScore = {};
+        for key in foodDict.keys():
+            if key not in relevant_foodDict.keys():
+                others_simScore[key] = cosine_similarity(foodDict[key], thisVec)[0][0]
+        simFoods+=sorted(others_simScore, key=others_simScore.get, reverse=True)[:others_foods_num]                    
         return simFoods;
     elif method==2:
         print('Under Construction');
@@ -164,24 +163,31 @@ if __name__=='__main__':
     #Example 1
     givenFoods = [r'aloo paratha', r'bread pakoras']
     inputString = r'almonds'
-    simFoods1 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 20, method=1)
+    simFoods1 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)
     #Example 2
     givenFoods = [r'eggless omelet',r'eggless pancake',r'bread paneer rolls']
     inputString = r'paaneeer'
-    simFoods2 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 20, method=1)
+    simFoods2 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)
     #Example 3
     givenFoods = [r'peanut chutney']
     inputString = r'yogort'
-    simFoods3 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 20, method=1)
+    simFoods3 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)
     #Example 4
     givenFoods = [r'apple coconut barfi', r'coconut almond burfi', r'punjabi flatbread']
     inputString = r'chutiney'
-    simFoods4 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 20, method=1)     
+    simFoods4 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)     
     #Example 5
-    givenFoods = [r'sweet potato halwa', r'sweet boondi', r'sweet flatbread']
+    givenFoods = [r'vegetable curry', r'sweet boondi', r'sweet flatbread']
     inputString = r'partha'
-    simFoods5 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 20, method=1)     
-    
-    
+    simFoods5 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)     
+    #Example 6
+    givenFoods = [r'aloo naan', r'apple bread rolls', r'yogurt sandwich', r'shahi paneer']
+    inputString = r'parotha'
+    simFoods6 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1)   
+    #Example 7
+    givenFoods = [r'apple coconut barfi', r'apple bread rolls', r'yogurt sandwich', r'apple vegan cake']
+    inputString = r'parotha'
+    simFoods7 = similarFoodsHistory(givenFoods, foodDict, inputString, individualNames, 10, method=1) 
+  
 
 
